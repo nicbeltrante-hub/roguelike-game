@@ -50,6 +50,8 @@ class RoguelikeEngine:
     def __init__(self, width: int = 30, height: int = 12):
         self.width: int = width
         self.height: int = height
+        self.level: int = 1
+        self.enemy_move_intervals: dict[int, int] = {1: 3, 2: 2, 3: 1}
         self.player: Player = Player(2, 2)
         self.enemy: Enemy = Enemy(width - 3, height - 3)
         self.score: int = 0
@@ -63,6 +65,7 @@ class RoguelikeEngine:
     # Generate the game map with walls, items, and an exit
     def generate_map(self) -> None:
         self.grid = [["." for _ in range(self.width)] for _ in range(self.height)]
+        self.total_items = 0
         for y in range(self.height):
             for x in range(self.width):
                 # Create walls around the edges of the map
@@ -117,7 +120,14 @@ class RoguelikeEngine:
             
             # Check if the player has reached the exit
             elif self.grid[self.player.y][self.player.x] == "E":
-                self.game_state = "WON"
+                if self.level == 3:
+                    self.game_state = "WON"
+                else:
+                    self.level += 1
+                    self.turn_count = 0
+                    self.player = Player(2, 2)
+                    self.enemy = Enemy(self.width - 3, self.height - 3)
+                    self.generate_map()
                 return
 
         # Check if the player has collided with the enemy
@@ -125,8 +135,9 @@ class RoguelikeEngine:
             self.game_state = "LOST"
             return
 
-        # Move the enemy every 3 turns
-        if self.turn_count > 0 and self.turn_count % 3 == 0:
+        # Move the enemy based on the current level's move interval
+        enemy_move_interval = self.enemy_move_intervals[self.level]
+        if self.turn_count > 0 and self.turn_count % enemy_move_interval == 0:
             edx, edy = self.enemy.calculate_next_move(self.player.x, self.player.y, self.grid)
             self.enemy.x += edx
             self.enemy.y += edy
@@ -142,8 +153,10 @@ class RoguelikeEngine:
         # Status message with score, items remaining, and controls
         cyan_score = Fore.CYAN + Style.BRIGHT + "Score:" + Style.RESET_ALL
         yellow_items = Fore.YELLOW + Style.BRIGHT + "Items Remaining:" + Style.RESET_ALL
-        
-        status_msg = f"{cyan_score} {self.score} | {yellow_items} {self.total_items} | Controls: WASD, Q=Quit\r\n"
+
+        # Determine the enemy move interval based on the current level
+        enemy_interval = self.enemy_move_intervals[self.level]
+        status_msg = f"Level: {self.level}/3 | {cyan_score} {self.score} | {yellow_items} {self.total_items} | Enemy moves every {enemy_interval} turn(s) | Controls: WASD, Q=Quit\r\n"
         # If all items are collected, display a message indicating that the portal is active
         if self.total_items == 0:
             magenta_portal = Fore.MAGENTA + Style.BRIGHT + "[!] PORTAL ACTIVE: Reach 'E' to escape! [!]" + Style.RESET_ALL

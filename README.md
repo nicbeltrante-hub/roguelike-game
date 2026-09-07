@@ -6,7 +6,7 @@ A small terminal-based 2D game written in Python. Explore a randomly generated g
 
 - Randomly generated maps with walls and collectible items
 - Colored terminal output for the player, enemy, items, and portal
-- Turn-based enemy movement
+- Three levels with increasingly fast enemy movement
 - Score tracking and win/loss states
 
 ## Requirements
@@ -46,17 +46,17 @@ The game reads one key at a time, so run it directly in a terminal rather than t
 ## Symbols
 
 | Symbol | Meaning          |
-| ------ | ---------------- | ---- |
+| ------ | ---------------- |
 | `@`    | Player           |
 | `X`    | Enemy            |
 | `*`    | Collectible item |
 | `E`    | Escape portal    |
-| `      | `                | Wall |
+| `\|`   | Wall             |
 | `.`    | Open space       |
 
 ## How to win
 
-Collect all items to activate the portal, then move onto `E` to escape. Each collected item is worth 10 points. The enemy moves toward you every three successful moves, so plan your route carefully!
+Collect all items to activate the portal, then move onto `E` to escape and advance to the next level. Each collected item is worth 10 points. The enemy moves toward you every three successful moves on level 1, every two moves on level 2, and every move on level 3. Escape all three levels to win!
 
 ## Project structure
 
