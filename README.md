@@ -5,8 +5,11 @@ A small terminal-based 2D game written in Python. Explore a randomly generated g
 ## Features
 
 - Randomly generated maps with walls and collectible items
-- Colored terminal output for the player, enemy, items, and portal
-- Three levels with increasingly fast enemy movement
+- Three levels with increasing difficulty
+- Three enemy behaviors: chaser, patroller, and random
+- Chasers use shortest-path movement around walls
+- Enemies spawn on open cells away from the player and each other
+- Colored terminal output for the player, enemies, items, walls, and portal
 - Score tracking and win/loss states
 
 ## Requirements
@@ -47,16 +50,30 @@ The game reads one key at a time, so run it directly in a terminal rather than t
 
 | Symbol | Meaning          |
 | ------ | ---------------- |
-| `@`    | Player           |
-| `X`    | Enemy            |
-| `*`    | Collectible item |
-| `E`    | Escape portal    |
-| `\|`   | Wall             |
+| `♞`    | Player           |
+| `☠`    | Enemy            |
+| `✦`    | Collectible item |
+| `◎`    | Escape portal    |
+| `▓`    | Wall             |
 | `.`    | Open space       |
 
 ## How to win
 
-Collect all items to activate the portal, then move onto `E` to escape and advance to the next level. Each collected item is worth 10 points. The enemy moves toward you every three successful moves on level 1, every two moves on level 2, and every move on level 3. Escape all three levels to win!
+Collect all items to activate the portal, then move onto `◎` to escape and advance to the next level. Each collected item is worth 10 points. Escape all three levels to win!
+
+## Levels
+
+| Level | Enemies                                              |
+| ----- | ---------------------------------------------------- |
+| 1     | One chaser, moving every 3 turns                     |
+| 2     | One chaser, moving every 2 turns, plus one patroller |
+| 3     | One chaser, moving every turn, plus one random enemy |
+
+## How to win
+
+Collect all items to activate the portal, then move onto `◎` to escape and
+advance to the next level. Each collected item is worth 10 points. Escape
+all three levels to win!
 
 ## Project structure
 
